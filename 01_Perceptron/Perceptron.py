@@ -41,8 +41,11 @@ class Perceptron:
         """
         self.w_ = np.zeros(1 + X.shape[1])  # First position corresponds to threshold
 
-        # TODO: Put your code (fit algorithm)
-
+        for _ in range(self.n_iter):
+            for x_row, y_row in zip(X, y):
+                y_predicted = self.__prediction_value(x_row)
+                weight_row_tuple = zip(self.w_, np.append([1], x_row))
+                self.w_ = [w_j + self.eta * (y_row - y_predicted) * x_j for w_j, x_j in weight_row_tuple]
 
     def predict(self, X):
         """Return class label.
@@ -51,6 +54,8 @@ class Perceptron:
             Return a list with classes
         """
 
-        # TODO: Put your code
+        return [self.__prediction_value(x_row) for x_row in X]
 
-        return np.random.randint(0, 2, size=X.shape[0])  # remove
+    def __prediction_value(self, x_row):
+        predicted = self.w_[0] + x_row[0] * self.w_[1] + x_row[1] * self.w_[2]
+        return -1 if predicted <= 0 else 1
