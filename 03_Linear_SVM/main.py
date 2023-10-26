@@ -21,25 +21,26 @@ perceptron = Adaline(eta=0.0005, n_iter=60)
 perceptron.fit(X_transformed, y)
 y_prediction = perceptron.predict(X)
 
-#Entrenam una SVM linear (classe SVC)
+# Entrenam una SVM linear (classe SVC)
 
-# TODO
-
+svc = SVC(C=10000, kernel='linear')
+svc.fit(X_transformed, y)
+svc_prediction = svc.predict(X)
 
 plt.figure(1)
+plt.scatter(X_transformed[:, 0], X_transformed[:, 1], c=y)
 
 #  Mostram els resultats Adaline
-plt.scatter(X_transformed[:, 0], X_transformed[:, 1], c=y)
 m = -perceptron.w_[1] / perceptron.w_[2]
 origen = (0, -perceptron.w_[0] / perceptron.w_[2])
 plt.axline(xy1=origen, slope=m, c="blue", label="Adaline")
 
-
 #  Mostram els resultats SVM
-# TODO
-#plt.axline(xy1= TODO, slope= TODO, c="green", label="SVM")
-#plt.scatter( TODO, facecolors="none", edgecolors="green")
-
+W = svc.coef_[0]
+m = -W[0]/W[1]
+origin = (0, -svc.intercept_[0]/W[1])
+plt.axline(xy1=origin, slope=m, c="green", label="SVM")
+plt.scatter(svc.support_vectors_[:, 0], svc.support_vectors_[:, 1], facecolors="none", edgecolors="green")
 
 plt.legend()
 plt.show()
